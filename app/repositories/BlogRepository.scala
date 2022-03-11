@@ -12,14 +12,6 @@ import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import org.joda.time.DateTime
 import reactivemongo.api.commands.WriteResult
 
-//import scala.concurrent.Future
-//import scala.concurrent.ExecutionContext.Implicits.global
-//
-//import reactivemongo.api.bson.{ BSONDocument, BSONString }
-//
-//import reactivemongo.api.Cursor
-//import reactivemongo.api.bson.collection.BSONCollection
-
 
 @Singleton
 class BlogRepository @Inject()(
@@ -52,21 +44,7 @@ class BlogRepository @Inject()(
       .collect[Seq](100, Cursor.FailOnError[Seq[Blog]]()))
   }
 
-//  def findTopPopularCats(): Future[Seq[String]] = {
-//    val clo = collection.value.get.get
-//    import clo.BatchCommands.AggregationFramework.{
-//      AggregationResult, Group, Match, SumField
-//    }
-//
-//    val res: Future[AggregationResult] = col.aggregate(
-//      Group(BSONString("$state"))( "totalPop" -> SumField("population")),
-//      List(Match(BSONDocument("totalPop" -> BSONDocument("$gte" -> 10000000L)))))
-//
-//    res.map(_.documents)
-//  }
-
   def create(blog: Blog): Future[WriteResult] = {
-//    catRepository.update(blog.catId)
     collection.flatMap(_.insert(ordered = false)
       .one(blog.copy(_creationDate = Some(new DateTime()), _updateDate = Some(new DateTime()))))
   }

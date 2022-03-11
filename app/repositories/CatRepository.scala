@@ -12,8 +12,6 @@ import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import org.joda.time.DateTime
 import reactivemongo.api.commands.{UpdateWriteResult, WriteResult}
 
-import scala.util.{Failure, Success}
-
 
 @Singleton
 class CatRepository @Inject()(
@@ -34,17 +32,6 @@ class CatRepository @Inject()(
   def findOne(id: BSONObjectID): Future[Option[Cat]] = {
     collection.flatMap(_.find(BSONDocument("_id" -> id), Option.empty[Cat]).one[Cat])
   }
-
-//  def findTopPopularCats(): Future[Seq[Cat]] = {
-//  }
-//
-//  def catBlogsPlusOne(id: String): Future[WriteResult] = {
-//    val objectIdTryResult = BSONObjectID.parse(id).get
-//    val cat = null
-//    findOne(objectIdTryResult).map {
-//      result => update(objectIdTryResult, result.get)
-//    }
-//  }
 
   def create(cat: Cat): Future[WriteResult] = {
     collection.flatMap(_.insert(ordered = false)
